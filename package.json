@@ -23,5 +23,17 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "vue-template-compiler": "^2.6.11"
-  }
+  },
+  "description": "A personal url shortner",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Biot-Savart/url_shortner.git"
+  },
+  "author": "Ryno Myburgh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Biot-Savart/url_shortner/issues"
+  },
+  "homepage": "https://github.com/Biot-Savart/url_shortner#readme"
 }
