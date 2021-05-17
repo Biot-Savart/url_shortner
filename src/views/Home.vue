@@ -1,18 +1,18 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="URL Shortner logo" src="../assets/shorter.gif">
+    <Shrinker/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Shrinker from '@/components/Shrinker.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    Shrinker
   }
 }
 </script>

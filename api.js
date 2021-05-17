@@ -7,6 +7,16 @@ const _ =  require('lodash');
 
 app.use([express.urlencoded({ extended: false }), cors()]);
 
+const validURL = function (str) {
+	var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+		'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+		'((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+		'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+		'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+		'(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+	return !!pattern.test(str);
+}
+
 app.get('/', async (req, res) => {
 	const allData = await ShortURL.find();
 	res.json(allData);
@@ -29,21 +39,28 @@ app.post('/short', async (req, res) => {
 	const fullUrl = req.query.fullUrl
 	console.log('URL requested: ', fullUrl);
 
-	let record = await ShortURL.findOne({ full: fullUrl })
+	const valid = validURL(fullUrl);
 
-	if (_.isNil(record)) {
-		// insert the record using the model
-		record = new ShortURL({
-			full: fullUrl
-		});
-		await record.save();
+	if(!valid && fullUrl.length < 10) {
+		res.json({error: "Invalid URL"});		
 	}
-	const data = {
-		fullUrl: fullUrl,
-		short: record.short
-	};
+	else {
+		let record = await ShortURL.findOne({ full: fullUrl })
 
-	res.json(data);
+		if (_.isNil(record)) {
+			// insert the record using the model
+			record = new ShortURL({
+				full: fullUrl
+			});
+			await record.save();
+		}
+		const data = {
+			fullUrl: fullUrl,
+			short: record.short
+		};
+
+		res.json(data);
+	}	
 });
 
 app.get('/:shortid', async (req, res) => {
