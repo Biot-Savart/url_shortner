@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="URL Shortner logo" src="../assets/shorter.gif">
     <Shrinker/>
   </div>
 </template>

@@ -4,6 +4,9 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
+    <img alt="URL Shortner logo" src="./assets/logo.png" class="main-logo">
+    <br/>
+    <img alt="URL Shortner logo" src="./assets/shorter.gif">
     <router-view/>
   </div>
 </template>
@@ -28,5 +31,9 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.main-logo {
+  width: 150px;
 }
 </style>
