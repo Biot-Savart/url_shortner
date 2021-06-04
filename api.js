@@ -1,11 +1,26 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
 const ShortURL = require('./src/models/url');
 const cors = require('cors');
 const _ =  require('lodash');
 
 app.use([express.urlencoded({ extended: false }), cors()]);
+
+const swaggerOptions = {
+	swaggerDefinition: {
+		info: {
+			title: 'URL Shortner API',
+			version: '1.0.0'
+		}
+	},
+	apis: ['api.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 const validURL = function (str) {
 	var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -17,6 +32,15 @@ const validURL = function (str) {
 	return !!pattern.test(str);
 }
 
+/**
+ * @swagger
+ * /:
+ *  get:
+ *   description: Get all URLs
+ *   responses:
+ *    200:
+ *     description: Success
+ */
 app.get('/', async (req, res) => {
 	const allData = await ShortURL.find();
 	res.json(allData);
@@ -35,6 +59,21 @@ app.get('/short', async (req, res) => {
 	res.json(data);
 });
 
+/**
+ * @swagger
+ * /short:
+ *  post:
+ *   description: Create a new shortened URL
+ *   parameters:
+ *    - name: fullUrl
+ *      description: The URL to shorten
+ *      in: query
+ *      required: true
+ *      type: string
+ *   responses:
+ *    201:
+ *     description: Created
+ */
 app.post('/short', async (req, res) => {
 	const fullUrl = req.query.fullUrl
 	console.log('URL requested: ', fullUrl);
@@ -63,8 +102,24 @@ app.post('/short', async (req, res) => {
 	}	
 });
 
+/**
+ * @swagger
+ * /{shortid}:
+ *  get:
+ *   description: Get a short URL's original URL
+ *   parameters:
+ *    - name: shortid
+ *      description: The ID of the short URL
+ *      in: path
+ *      required: true
+ *      type: string
+ *   responses:
+ *    302:
+ *     description: Success 
+ */
 app.get('/:shortid', async (req, res) => {
 	// grab the :shortid param
+	debugger;
 	const shortid = req.params.shortid;
 
 	// perform the mongoose call to find the long URL
